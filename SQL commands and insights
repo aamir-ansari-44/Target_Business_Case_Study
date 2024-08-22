@@ -23,3 +23,44 @@ target.orders AS orders
 ON
 customers.customer_id = orders.customer_id
 where order_status = "delivered"
+
+3.	Is there a growing trend in the no. of orders placed over the past years?
+SQL Query-
+SELECT
+EXTRACT(year
+FROM
+order_purchase_timestamp) AS year_,
+EXTRACT(month
+FROM
+order_purchase_timestamp) AS month_,
+count(order_id) as volume
+FROM
+target.orders
+where order_status='delivered'
+group by year_, month_
+order by year_, month_
+Insight-  
+
+
+4.	During what time of the day, do the customers mostly place their orders? (Dawn, Morning, Afternoon or Night)
+Assumption-     •  0-6 hrs : Dawn
+•  7-12 hrs : Mornings
+• 13-18 hrs : Afternoon
+• 19-23 hrs : Night
+SQL Query- 
+select sum(case when hour_ between 0 and 6 then volume else 0 end) as dawn,
+sum(case when hour_ between 7 and 12 then volume else 0 end) as morning,
+sum(case when hour_ between 13 and 18 then volume else 0 end) as afternoon,
+sum(case when hour_ between 19 and 23 then volume else 0 end) as night,
+from (SELECT
+EXTRACT(hour
+FROM
+order_purchase_timestamp) AS hour_,
+COUNT(DISTINCT order_id) as volume
+FROM
+target.orders
+GROUP BY
+hour_
+ORDER BY
+hour_)
+
