@@ -1,0 +1,25 @@
+Dataset- https://drive.google.com/drive/folders/1TGEc66YKbD443nslRi1bWgVd238gJCnb
+Description of Company- Target is a globally renowned brand and a prominent retailer in the United States. Target makes itself a preferred shopping destination by offering outstanding value, inspiration, innovation and an exceptional guest experience that no other retailer can deliver.
+
+1.	Ask 1- Get the time range between which the orders were placed.
+Assumption- Time stamp of order placed if they got deliver successful is considered
+SQL query- 
+SELECT
+  MIN(order_purchase_timestamp) AS minTime,
+  MAX(order_purchase_timestamp) AS maxTime
+FROM
+  target.orders
+
+2.	Ask 2-  Count the Cities & States of customers who ordered during the given period.
+Assumption- Customers who successfully placed and order and got it delivered is considered.
+SQL query- 
+SELECT
+DISTINCT customer_city,
+customer_state
+FROM
+target.customers AS customers
+INNER JOIN
+target.orders AS orders
+ON
+customers.customer_id = orders.customer_id
+where order_status = "delivered"
